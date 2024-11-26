@@ -41,25 +41,68 @@ public class Estadio {
             menuSelectNum++;
         }
     }
-
-    public void sectionSelect() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Select section: (Enter menu option 1-" + sections.size() + ")");
-            int menuSelect;
-            do {
-                menuSelect = scanner.nextInt();
-            } while (menuSelect < 1 || menuSelect > sections.size());
+   //
+    public void testSeatOperations() {
+        System.out.println("Testing Seat Operations:");
     
-            Section selectedSection = sections.get(menuSelect - 1);
+        // Create a section (Field Level)
+        Section fieldLevel = sections.get(0); // Get Field Level section
     
-            if (selectedSection.isFull()) {
-                System.out.println("Section is full. Adding to queue...");
-                // add to queue
-            } else {
-                System.out.println("Section has been selected.");
+        // Reserve seats
+        System.out.println("Reserving Row 1, Seat 1: " + fieldLevel.reserveSeat(1, 1)); // Expected: true
+        System.out.println("Reserving Row 1, Seat 2: " + fieldLevel.reserveSeat(1, 2)); // Expected: true
+        System.out.println("Reserving Row 1, Seat 1 again: " + fieldLevel.reserveSeat(1, 1)); // Expected: false (duplicate)
+    
+        // Check availability
+        System.out.println("Available Seats: " + fieldLevel.getAvailableSeats()); // Expected: Capacity - 2
+    
+        // Cancel a seat
+        System.out.println("Canceling Row 1, Seat 1: " + fieldLevel.cancelSeat(1, 1)); // Expected: true
+        System.out.println("Canceling Row 1, Seat 3: " + fieldLevel.cancelSeat(1, 3)); // Expected: false (not reserved)
+    
+        // Check availability after cancellation
+        System.out.println("Available Seats after cancellation: " + fieldLevel.getAvailableSeats()); // Expected: Capacity - 1
+    }
+    public void sectionSelect(Scanner scanner) {
+        System.out.println("Select section: (Enter menu option 1-" + sections.size() + ")");
+        int menuSelect;
+        do {
+            while (!scanner.hasNextInt()) { 
+                System.out.println("Invalid input. Please enter a number between 1 and " + sections.size() + ":");
+                scanner.next(); 
             }
+            menuSelect = scanner.nextInt();
+        } while (menuSelect < 1 || menuSelect > sections.size());
+    
+        Section selectedSection = sections.get(menuSelect - 1);
+    
+        if (selectedSection.isFull()) {
+            System.out.println("Section is full. Adding to queue...");
+            // Add to queue (not implemented yet)be
+        } else {
+            System.out.println("Section has been selected.");
         }
     }
+
+    //  public void sectionSelect() {
+        
+    //     try (Scanner scanner = new Scanner(System.in)) {
+    //         System.out.println("Select section: (Enter menu option 1-" + sections.size() + ")");
+    //         int menuSelect;
+    //         do {
+    //             menuSelect = scanner.nextInt();
+    //         } while (menuSelect < 1 || menuSelect > sections.size());
+    
+    //         Section selectedSection = sections.get(menuSelect - 1);
+    
+    //         if (selectedSection.isFull()) {
+    //             System.out.println("Section is full. Adding to queue...");
+    //             // add to queue
+    //         } else {
+    //             System.out.println("Section has been selected.");
+    //         }
+    //     }
+    // }
         
 
     // Private Section class
@@ -67,7 +110,7 @@ public class Estadio {
         private final String name;
         private final int cost;
         private final int capacity;
-        private final Set<Integer> seats;
+        private final Set<Asiento> seats;
 
         public Section(String name, int cost, int capacity) {
             this.name = name;
@@ -100,9 +143,22 @@ public class Estadio {
             return this.getCapacity() - this.seats.size();
         }
 
+        public boolean reserveSeat(int row, int number){
+            if (isFull()) {
+                return false;
+            }
+            Asiento newSeat = new Asiento(name, row, number);
+            return seats.add(newSeat);
+        }
+
+        public boolean cancelSeat(int row, int number){
+            Asiento seatToRemove = new Asiento(name, row, number);
+            return seats.remove(seatToRemove);
+        }
         @Override
         public String toString() {
             return "Section [Name: " + name + ", Cost: $" + cost + ", Available Seats: " + getAvailableSeats() + "]";
+
         }
     }
 }
