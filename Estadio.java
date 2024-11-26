@@ -3,15 +3,19 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.HashMap;
 
 public class Estadio {
     private final List<Section> sections;
+    private final HashMap<Cliente, List<Asiento>> reservations;
+
 
     public Estadio() {
         sections = new ArrayList<>();
         sections.add(new Section("Field Level", 300, 500));
         sections.add(new Section("Main Level", 120, 1000));
         sections.add(new Section("Grandstand Level", 45, 2000));
+        reservations = new HashMap<>();
     }
 
     // Show available sections and sold out sections 
@@ -41,27 +45,73 @@ public class Estadio {
             menuSelectNum++;
         }
     }
-   //
+    public boolean reserveSeat(Cliente cliente, String sectionName, int row, int number) {
+        for (Section section : sections) {
+            if (section.getName().equalsIgnoreCase(sectionName)) {
+                if (section.reserveSeat(row, number)) {
+                    Asiento newSeat = new Asiento(sectionName, row, number);
+                    reservations.putIfAbsent(cliente, new ArrayList<>());
+                    reservations.get(cliente).add(newSeat);
+
+                    System.out.println("Seat reserved successfully for " + cliente.getName() + ": " + newSeat);
+                    return true;
+                } else {
+                    System.out.println("Reservation failed: Section is full or seat already taken.");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Section not found: " + sectionName);
+        return false;
+    }
+    public boolean cancelSeat(Cliente cliente, String sectionName, int row, int number) {
+        for (Section section : sections) {
+            if (section.getName().equalsIgnoreCase(sectionName)) {
+                if (section.cancelSeat(row, number)) { 
+                    Asiento seatToRemove = new Asiento(sectionName, row, number);
+                    if (reservations.containsKey(cliente)) {
+                        reservations.get(cliente).remove(seatToRemove);
+                        if (reservations.get(cliente).isEmpty()) {
+                            reservations.remove(cliente); 
+                        }
+                    }
+
+                    System.out.println("Seat canceled successfully for " + cliente.getName() + ": " + seatToRemove);
+                    return true;
+                } else {
+                    System.out.println("Cancellation failed: Seat not reserved.");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Section not found: " + sectionName);
+        return false;
+    }
+    public void viewReservations(Cliente cliente) {
+        if (reservations.containsKey(cliente)) {
+            System.out.println("Reservations for " + cliente.getName() + ":");
+            for (Asiento seat : reservations.get(cliente)) {
+                System.out.println(seat);
+            }
+        } else {
+            System.out.println(cliente.getName() + " has no reservations.");
+        }
+    }
+    
+
+   // PARA PROBAR, HAY QUE BORRAR DESPUES
     public void testSeatOperations() {
         System.out.println("Testing Seat Operations:");
     
-        // Create a section (Field Level)
-        Section fieldLevel = sections.get(0); // Get Field Level section
+        Section fieldLevel = sections.get(0);
     
-        // Reserve seats
-        System.out.println("Reserving Row 1, Seat 1: " + fieldLevel.reserveSeat(1, 1)); // Expected: true
-        System.out.println("Reserving Row 1, Seat 2: " + fieldLevel.reserveSeat(1, 2)); // Expected: true
-        System.out.println("Reserving Row 1, Seat 1 again: " + fieldLevel.reserveSeat(1, 1)); // Expected: false (duplicate)
-    
-        // Check availability
-        System.out.println("Available Seats: " + fieldLevel.getAvailableSeats()); // Expected: Capacity - 2
-    
-        // Cancel a seat
-        System.out.println("Canceling Row 1, Seat 1: " + fieldLevel.cancelSeat(1, 1)); // Expected: true
-        System.out.println("Canceling Row 1, Seat 3: " + fieldLevel.cancelSeat(1, 3)); // Expected: false (not reserved)
-    
-        // Check availability after cancellation
-        System.out.println("Available Seats after cancellation: " + fieldLevel.getAvailableSeats()); // Expected: Capacity - 1
+        System.out.println("Reserving Row 1, Seat 1: " + fieldLevel.reserveSeat(1, 1));
+        System.out.println("Reserving Row 1, Seat 2: " + fieldLevel.reserveSeat(1, 2));
+        System.out.println("Reserving Row 1, Seat 1 again: " + fieldLevel.reserveSeat(1, 1)); 
+        System.out.println("Available Seats: " + fieldLevel.getAvailableSeats()); 
+        System.out.println("Canceling Row 1, Seat 1: " + fieldLevel.cancelSeat(1, 1)); 
+        System.out.println("Canceling Row 1, Seat 3: " + fieldLevel.cancelSeat(1, 3)); 
+        System.out.println("Available Seats after cancellation: " + fieldLevel.getAvailableSeats()); 
     }
     public void sectionSelect(Scanner scanner) {
         System.out.println("Select section: (Enter menu option 1-" + sections.size() + ")");
@@ -78,32 +128,10 @@ public class Estadio {
     
         if (selectedSection.isFull()) {
             System.out.println("Section is full. Adding to queue...");
-            // Add to queue (not implemented yet)be
         } else {
             System.out.println("Section has been selected.");
         }
     }
-
-    //  public void sectionSelect() {
-        
-    //     try (Scanner scanner = new Scanner(System.in)) {
-    //         System.out.println("Select section: (Enter menu option 1-" + sections.size() + ")");
-    //         int menuSelect;
-    //         do {
-    //             menuSelect = scanner.nextInt();
-    //         } while (menuSelect < 1 || menuSelect > sections.size());
-    
-    //         Section selectedSection = sections.get(menuSelect - 1);
-    
-    //         if (selectedSection.isFull()) {
-    //             System.out.println("Section is full. Adding to queue...");
-    //             // add to queue
-    //         } else {
-    //             System.out.println("Section has been selected.");
-    //         }
-    //     }
-    // }
-        
 
     // Private Section class
     private class Section {
@@ -162,3 +190,4 @@ public class Estadio {
         }
     }
 }
+

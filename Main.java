@@ -4,26 +4,55 @@ public class Main {
    public static void main(String[] args) {
       Estadio estadio = new Estadio();
       Scanner scanner = new Scanner(System.in);
-  
       System.out.println("Enter your Name, Email and Phone Number:");
       Cliente cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
-      System.out.println(cliente.getName());
-  
-      estadio.showAvailableSections();
-      estadio.sectionSelect(scanner); 
-      estadio.testSeatOperations();
-  }
+      boolean exit = false; 
+        while (!exit) {
+         //opciones del menu
+            System.out.println("\n--- Menu ---");
+            System.out.println("1. View Available Sections");
+            System.out.println("2. Reserve a Seat");
+            System.out.println("3. Cancel a Reservation");
+            System.out.println("4. View My Reservations");
+            System.out.println("5. Exit");
+            System.out.print("Choose an option: ");
+            
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
 
-
-   // public static void main(String[] args){
-   //    try (Scanner scanner = new Scanner(System.in)) {
-   //       System.out.println("Enter your Name, Email and Phone Number:");
-   //       Cliente cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
-   //       System.out.println(cliente.getName());
-   //    }
-   //    Estadio coliseo = new Estadio();
-   //    coliseo.showAvailableSections();
-   //    coliseo.sectionSelect();
-   //    coliseo.testSeatOperations();
-   // } 
+            switch (choice) {
+                case 1: 
+                    estadio.showAvailableSections();
+                    break;
+                case 2: 
+                    System.out.print("Enter Section Name: ");
+                    String sectionName = scanner.nextLine();
+                    System.out.print("Enter Row: ");
+                    int row = scanner.nextInt();
+                    System.out.print("Enter Seat Number: ");
+                    int seatNumber = scanner.nextInt();
+                    estadio.reserveSeat(cliente, sectionName, row, seatNumber);
+                    break;
+                case 3: 
+                    System.out.print("Enter Section Name: ");
+                    sectionName = scanner.nextLine();
+                    System.out.print("Enter Row: ");
+                    row = scanner.nextInt();
+                    System.out.print("Enter Seat Number: ");
+                    seatNumber = scanner.nextInt();
+                    estadio.cancelSeat(cliente, sectionName, row, seatNumber);
+                    break;
+                case 4: 
+                    estadio.viewReservations(cliente);
+                    break;
+                case 5: 
+                    exit = true;
+                    System.out.println("Goodbye!");
+                    break;
+                default: 
+                    System.out.println("Invalid option. Try again.");
+            }
+        }
+        scanner.close();
+    }
 }
