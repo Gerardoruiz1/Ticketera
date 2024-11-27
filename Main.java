@@ -7,6 +7,39 @@ public class Main {
       System.out.println("Enter your Name, Email and Phone Number:");
       Cliente cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
       boolean exit = false; 
+         // Test 1: Log transactions and view history
+        estadio.logTransaction("Reservation: Field Level - 2 seats for John Doe");
+        estadio.logTransaction("Reservation: Main Level - 4 seats for Jane Smith");
+        System.out.println("Transaction History: " + estadio.transactionHistory);
+
+        // Test 2: Undo the last transaction
+        estadio.undoLastTransaction();
+        System.out.println("Transaction History After Undo: " + estadio.transactionHistory);
+
+        // Test 3: Add clients to the waitlist
+        Cliente client1 = new Cliente("Alice Johnson", "alice@example.com", "123-456-7890");
+        Cliente client2 = new Cliente("Bob Brown", "bob@example.com", "098-765-4321");
+        estadio.addToWaitlist("Field Level", client1);
+        estadio.addToWaitlist("Field Level", client2);
+        System.out.println("Waitlist for Field Level: " + estadio.waitLists.get("Field Level"));
+
+        // Test 4: Serve a client from the waitlist
+        Cliente servedClient = estadio.serveFromWaitlist("Field Level");
+        System.out.println("Served Client: " + servedClient);
+        System.out.println("Waitlist for Field Level After Serving: " + estadio.waitLists.get("Field Level"));
+
+        // Test 5: Serve another client from the waitlist
+        Cliente servedClient2 = estadio.serveFromWaitlist("Field Level");
+        System.out.println("Served Client: " + servedClient2);
+        System.out.println("Waitlist for Field Level After Serving Again: " + estadio.waitLists.get("Field Level"));
+
+        // Test 6: Attempt to serve from an empty waitlist
+        Cliente servedClient3 = estadio.serveFromWaitlist("Field Level");
+        System.out.println("Served Client from Empty Waitlist: " + servedClient3);
+
+
+
+
         while (!exit) {
          //opciones del menu
             System.out.println("\n--- Menu ---");

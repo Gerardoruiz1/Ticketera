@@ -1,22 +1,65 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.HashMap;
+import java.util.Stack;
 
 public class Estadio {
     private final List<Section> sections;
     private final HashMap<Cliente, List<Asiento>> reservations;
-
-
+    public final LinkedList<String> transactionHistory; // this could be done with a LinkedList<HashMap<String,String>>
+    public final Stack<String> undoStack;
+    public final HashMap<String, Queue<Cliente>> waitLists;
     public Estadio() {
         sections = new ArrayList<>();
         sections.add(new Section("Field Level", 300, 500));
         sections.add(new Section("Main Level", 120, 1000));
         sections.add(new Section("Grandstand Level", 45, 2000));
         reservations = new HashMap<>();
+        transactionHistory = new LinkedList<>();
+        undoStack = new Stack<>();
+        waitLists = new HashMap<>();
+        for (Section section : sections) {
+            waitLists.put(section.getName(), new LinkedList<>());
+        }
     }
+
+     // Add a transaction to the history log
+     public void logTransaction(String transaction) {
+        transactionHistory.add(transaction);
+        undoStack.push(transaction); // Save the transaction to the undo stack
+    }
+
+    // Undo the last transaction
+    public void undoLastTransaction() {
+        if (!undoStack.isEmpty()) {
+            String lastTransaction = undoStack.pop();
+            System.out.println("Undoing: " + lastTransaction);
+            // Add logic to reverse the transaction if necessary
+        } else {
+            System.out.println("No actions to undo.");
+        }
+    }
+
+    // Add a client to the waitlist for a specific section
+    public void addToWaitlist(String sectionName, Cliente cliente) {
+        if (waitLists.containsKey(sectionName)) {
+            waitLists.get(sectionName).add(cliente);
+        }
+    }
+
+    // Serve the next client from the waitlist for a specific section
+    public Cliente serveFromWaitlist(String sectionName) {
+        if (waitLists.containsKey(sectionName) && !waitLists.get(sectionName).isEmpty()) {
+            return waitLists.get(sectionName).poll();
+        }
+        return null;
+    }
+
 
     // Show available sections and sold out sections 
     public void showAvailableSections() {
