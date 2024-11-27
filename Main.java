@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 public class Main {
    public static void main(String[] args) {
       Estadio estadio = new Estadio();
@@ -17,8 +16,8 @@ public class Main {
         System.out.println("Transaction History After Undo: " + estadio.transactionHistory);
 
         // Test 3: Add clients to the waitlist
-        Cliente client1 = new Cliente("Alice Johnson", "alice@example.com", "123-456-7890");
-        Cliente client2 = new Cliente("Bob Brown", "bob@example.com", "098-765-4321");
+        Cliente client1 = new Cliente("Alice Johnson", "alice@example.com", "1234567890");
+        Cliente client2 = new Cliente("Bob Brown", "bob@example.com", "0987654321");
         estadio.addToWaitlist("Field Level", client1);
         estadio.addToWaitlist("Field Level", client2);
         System.out.println("Waitlist for Field Level: " + estadio.waitLists.get("Field Level"));

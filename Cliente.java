@@ -26,6 +26,7 @@ public class Cliente {
     }
 
     private void validatePhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber.trim(); // Remove spaces
         if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
             throw new IllegalArgumentException("Invalid phone number: must be exactly 10 digits.");
         }
