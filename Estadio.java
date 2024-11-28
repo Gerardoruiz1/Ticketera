@@ -29,7 +29,15 @@ public class Estadio {
         }
     }
 
-    // Log a transaction
+    public boolean isValidSection(String sectionName) {
+        for (Section section : sections) {
+            if (section.getName().equalsIgnoreCase(sectionName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void logTransaction(String action, Cliente cliente, String sectionName, int row, int number) {
         String transaction = String.format(
             "Action: %s | Client: %s | Section: %s | Row: %d | Seat: %d",
@@ -39,7 +47,6 @@ public class Estadio {
         undoStack.push(transaction);
     }
 
-    // Print transaction history
     public void printTransactionHistory() {
         if (transactionHistory.isEmpty()) {
             System.out.println("No transactions found.");
@@ -50,6 +57,7 @@ public class Estadio {
             }
         }
     }
+
 
     // Undo the last transaction
     public void undoLastTransaction() {
