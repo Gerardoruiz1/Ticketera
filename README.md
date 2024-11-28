@@ -102,8 +102,17 @@ Manages the stadium's seating, reservations, and waitlists.
 The main entry point of the program that provides a menu-driven interface for the operator.
 
 #### Menu Options:
+
 1. View available sections.
 2. Reserve a seat.
 3. Cancel a reservation.
 4. View customer's reservations.
-5. Exit the program.
+5. Add another client.
+6. Undo last transaction.
+7. View all clients' reservation history.
+8. Exit the program.
+
+## Programmer Credits
+Justin Rivera Muñiz
+Gerardo Ruiz Barreto
+Anthony Martinez Gomez
