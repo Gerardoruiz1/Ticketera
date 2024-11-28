@@ -16,10 +16,9 @@ public class Main {
             System.out.println("2. Reserve a Seat");
             System.out.println("3. Cancel a Reservation");
             System.out.println("4. View My Reservations");
-            System.out.println("5. Exit"); 
-            //add another client
-            System.out.println("6. Add another Client"); 
-            System.out.println("7. Undo Last Transaction");
+            System.out.println("5. Add another Client"); 
+            System.out.println("6. Undo Last Transaction");
+            System.out.println("7. Exit"); 
             //
             System.out.print("Choose an option: ");
             
@@ -51,15 +50,15 @@ public class Main {
                 case 4: 
                     estadio.viewReservations(cliente);
                     break;
-                case 5: 
+                case 7: 
                     exit = true;
                     System.out.println("Goodbye!");
                     break;
-                case 6:
+                case 5:
                 System.out.println("Enter your Name, Email and Phone Number:");
                 cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
                 break;
-                case 7:
+                case 6:
                 estadio.undoLastTransaction();
                 break;
                 default: 
