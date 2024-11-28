@@ -143,7 +143,7 @@ public boolean reserveSeat(Cliente cliente, String sectionName, int row, int num
                 logTransaction("reserve", cliente, sectionName, row, number); // Log the reservation
 
                 System.out.println("Seat reserved successfully for " + cliente.getName() + ": " + newSeat);
-                transactionHistory.add("Name:" + cliente + "Section name:" + sectionName + "Row" + row + "Number:" + number);
+               
                 return true;
             } else {
                 System.out.println("Reservation failed: Section is full or seat already taken.");
