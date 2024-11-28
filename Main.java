@@ -74,25 +74,44 @@ public class Main {
     }
 
     private static Cliente createNewCliente(Scanner scanner) {
-        while (true) {
+        String name = null;
+        String email = null;
+        String phoneNumber = null;
+    
+        while (name == null) {
             try {
                 System.out.println("Enter your Name:");
-                String name = scanner.nextLine();
+                name = scanner.nextLine();
                 Cliente.validateName(name);
-
-                System.out.println("Enter your Email:");
-                String email = scanner.nextLine();
-                Cliente.validateEmail(email);
-
-                System.out.println("Enter your Phone Number:");
-                String phoneNumber = scanner.nextLine();
-                Cliente.validatePhoneNumber(phoneNumber);
-
-                return new Cliente(name, email, phoneNumber); // Return valid client
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                System.out.println("Please try again.");
+                name = null; // Reset to prompt again
             }
         }
+    
+        while (email == null) {
+            try {
+                System.out.println("Enter your Email:");
+                email = scanner.nextLine();
+                Cliente.validateEmail(email);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                email = null; // Reset to prompt again
+            }
+        }
+    
+        while (phoneNumber == null) {
+            try {
+                System.out.println("Enter your Phone Number:");
+                phoneNumber = scanner.nextLine();
+                Cliente.validatePhoneNumber(phoneNumber);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                phoneNumber = null; // Reset to prompt again
+            }
+        }
+    
+        return new Cliente(name, email, phoneNumber); // Return valid client
     }
+    
 }
