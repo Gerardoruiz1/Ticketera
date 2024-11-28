@@ -16,9 +16,9 @@ public class Estadio {
     public final HashMap<String, Queue<Cliente>> waitLists;
     public Estadio() {
         sections = new ArrayList<>();
-        sections.add(new Section("Field Level", 300, 500));
-        sections.add(new Section("Main Level", 120, 1000));
-        sections.add(new Section("Grandstand Level", 45, 2000));
+        sections.add(new Section("Field Level", 300, 5));
+        sections.add(new Section("Main Level", 120, 1));
+        sections.add(new Section("Grandstand Level", 45, 2));
         reservations = new HashMap<>();
         transactionHistory = new LinkedList<>();
         undoStack = new Stack<>();
@@ -100,6 +100,12 @@ public class Estadio {
                     return true;
                 } else {
                     System.out.println("Reservation failed: Section is full or seat already taken.");
+                    System.out.println("Do you wish to be added to a waiting list for this section?");
+                    //if yes
+                    //added to waitingList 
+                    //if not 
+                    System.out.println("choose another seat");
+                    //aqui poner si la persona desea estan 
                     return false;
                 }
             }
