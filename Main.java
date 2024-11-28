@@ -26,7 +26,10 @@ public class Main {
             System.out.println("2. Reserve a Seat");
             System.out.println("3. Cancel a Reservation");
             System.out.println("4. View My Reservations");
-            System.out.println("5. Exit");
+            System.out.println("5. Add another Client"); 
+            //add another client
+            System.out.println("6. Exit"); 
+            //
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
@@ -61,11 +64,15 @@ public class Main {
                     estadio.viewReservations(cliente);
                     break;
                 case 5: 
+                    System.out.println("Enter your Name, Email and Phone Number:");
+                    cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
+                    break;
+                    default: 
+                    System.out.println("Invalid option. Try again.");
+                case 6:
                     exit = true;
                     System.out.println("Goodbye!");
                     break;
-                default: 
-                    System.out.println("Invalid option. Try again.");
             }
         }
         scanner.close();
