@@ -28,23 +28,27 @@ public class Estadio {
         }
     }
 
-     // Add a transaction to the history log
-     public void logTransaction(String action, Cliente cliente, String sectionName, int row, int number) {
-        String transaction = action + ":" + cliente.getName() + ":" + sectionName + ":" + row + ":" + number;
+    public void logTransaction(String action, Cliente cliente, String sectionName, int row, int number) {
+        String transaction = String.format(
+            "Action: %s | Client: %s | Section: %s | Row: %d | Seat: %d",
+            action.toUpperCase(), cliente.getName(), sectionName, row, number
+        );
         transactionHistory.add(transaction); // Log transaction to history
         undoStack.push(transaction); // Push to undo stack
     }
+    
     
     public void printTransactionHistory() {
         if (transactionHistory.isEmpty()) {
             System.out.println("No transactions found.");
         } else {
-            System.out.println("Transaction History:");
+            System.out.println("\nTransaction History:");
             for (String transaction : transactionHistory) {
                 System.out.println(transaction);
             }
         }
     }
+    
     
     // Undo the last transaction
     public void undoLastTransaction() {     
