@@ -3,8 +3,20 @@ public class Main {
    public static void main(String[] args) {
         Estadio estadio = new Estadio();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your Name, Email and Phone Number:");
-        Cliente cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
+        
+        System.out.println("Enter your Name:");
+        String name = scanner.nextLine();
+        Cliente.validateName(name);
+        
+        System.out.println("Enter your Email:");
+        String email = scanner.nextLine();
+        Cliente.validateEmail(email);
+
+        System.out.println("Enter your Phone Number:");
+        String phoneNumber = scanner.nextLine();
+        Cliente.validatePhoneNumber(phoneNumber);
+        
+        Cliente cliente = new Cliente(name, email, phoneNumber);
         boolean exit = false; 
 
         while (!exit) {

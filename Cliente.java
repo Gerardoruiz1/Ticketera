@@ -13,19 +13,19 @@ public class Cliente {
     }
 
     // Validation Methods
-    private void validateName(String name) {
+    public static void validateName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
         }
     }
 
-    private void validateEmail(String email) {
+    public static void validateEmail(String email) {
         if (email == null || !email.contains("@") || email.contains(" ")) {
             throw new IllegalArgumentException("Invalid email: must contain '@' and no spaces.");
         }
     }
 
-    private void validatePhoneNumber(String phoneNumber) {
+    public static void validatePhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber.trim(); // Remove spaces
         if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
             throw new IllegalArgumentException("Invalid phone number: must be exactly 10 digits.");
