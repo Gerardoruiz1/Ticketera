@@ -31,19 +31,67 @@ public class Main {
                     case 2:
                         System.out.print("Enter Section Name: ");
                         String sectionName = scanner.nextLine();
-                        System.out.print("Enter Row: ");
-                        int row = scanner.nextInt();
-                        System.out.print("Enter Seat Number: ");
-                        int seatNumber = scanner.nextInt();
+                        if (!estadio.isValidSection(sectionName)) {
+                            System.out.println("Error: Invalid section name. Please choose from the available sections.");
+                            break;
+                        }
+
+                        int row = -1;
+                        while (row < 0) {
+                            System.out.print("Enter Row: ");
+                            if (scanner.hasNextInt()) {
+                                row = scanner.nextInt();
+                            } else {
+                                System.out.println("Invalid input. Please enter a valid row number.");
+                                scanner.next(); // Clear invalid input
+                            }
+                        }
+
+                        int seatNumber = -1;
+                        while (seatNumber < 0) {
+                            System.out.print("Enter Seat Number: ");
+                            if (scanner.hasNextInt()) {
+                                seatNumber = scanner.nextInt();
+                            } else {
+                                System.out.println("Invalid input. Please enter a valid seat number.");
+                                scanner.next(); // Clear invalid input
+                            }
+                        }
+
+                        scanner.nextLine(); // Consume newline
                         estadio.reserveSeat(cliente, sectionName, row, seatNumber);
                         break;
                     case 3:
                         System.out.print("Enter Section Name: ");
                         sectionName = scanner.nextLine();
-                        System.out.print("Enter Row: ");
-                        row = scanner.nextInt();
-                        System.out.print("Enter Seat Number: ");
-                        seatNumber = scanner.nextInt();
+                        if (!estadio.isValidSection(sectionName)) {
+                            System.out.println("Error: Invalid section name. Please choose from the available sections.");
+                            break;
+                        }
+
+                        row = -1;
+                        while (row < 0) {
+                            System.out.print("Enter Row: ");
+                            if (scanner.hasNextInt()) {
+                                row = scanner.nextInt();
+                            } else {
+                                System.out.println("Invalid input. Please enter a valid row number.");
+                                scanner.next(); // Clear invalid input
+                            }
+                        }
+
+                        seatNumber = -1;
+                        while (seatNumber < 0) {
+                            System.out.print("Enter Seat Number: ");
+                            if (scanner.hasNextInt()) {
+                                seatNumber = scanner.nextInt();
+                            } else {
+                                System.out.println("Invalid input. Please enter a valid seat number.");
+                                scanner.next(); // Clear invalid input
+                            }
+                        }
+
+                        scanner.nextLine(); // Consume newline
                         estadio.cancelSeat(cliente, sectionName, row, seatNumber);
                         break;
                     case 4:
@@ -65,9 +113,9 @@ public class Main {
                     default:
                         System.out.println("Invalid option. Please choose a number between 1 and 8.");
                 }
-            } else { // Handle invalid input
+            } else {
                 System.out.println("Invalid input. Please enter a number between 1 and 8.");
-                scanner.nextLine(); // Consume invalid input
+                scanner.nextLine(); // Clear invalid input
             }
         }
         scanner.close(); // Close the scanner at the very end
@@ -77,7 +125,7 @@ public class Main {
         String name = null;
         String email = null;
         String phoneNumber = null;
-    
+
         while (name == null) {
             try {
                 System.out.println("Enter your Name:");
@@ -85,10 +133,10 @@ public class Main {
                 Cliente.validateName(name);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                name = null; // Reset to prompt again
+                name = null;
             }
         }
-    
+
         while (email == null) {
             try {
                 System.out.println("Enter your Email:");
@@ -96,10 +144,10 @@ public class Main {
                 Cliente.validateEmail(email);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                email = null; // Reset to prompt again
+                email = null;
             }
         }
-    
+
         while (phoneNumber == null) {
             try {
                 System.out.println("Enter your Phone Number:");
@@ -107,11 +155,10 @@ public class Main {
                 Cliente.validatePhoneNumber(phoneNumber);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                phoneNumber = null; // Reset to prompt again
+                phoneNumber = null;
             }
         }
-    
+
         return new Cliente(name, email, phoneNumber); // Return valid client
     }
-    
 }
