@@ -16,7 +16,8 @@ public class Main {
             System.out.println("4. View My Reservations");
             System.out.println("5. Add another Client");
             System.out.println("6. Undo Last Transaction");
-            System.out.println("7. Exit");
+            System.out.println("7. View All Clients Reservation History"); // New option
+            System.out.println("8. Exit"); 
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -54,6 +55,10 @@ public class Main {
                     estadio.undoLastTransaction();
                     break;
                 case 7:
+                    exit = true;
+                    System.out.println("Goodbye!");
+                    break;
+                case 8: 
                     exit = true;
                     System.out.println("Goodbye!");
                     break;

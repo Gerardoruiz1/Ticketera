@@ -11,7 +11,7 @@ import java.util.Stack;
 public class Estadio {
     private final List<Section> sections;
     private final HashMap<Cliente, List<Asiento>> reservations;
-    public final LinkedList<String> transactionHistory; // this could be done with a LinkedList<HashMap<String,String>>
+    public final LinkedList<String> transactionHistory; 
     public final Stack<String> undoStack;
     public final HashMap<String, Queue<Cliente>> waitLists;
     public Estadio() {
@@ -28,16 +28,30 @@ public class Estadio {
         }
     }
 
-     // Add a transaction to the history log
-     public void logTransaction(String action, Cliente cliente, String sectionName, int row, int number) {
-        String transaction = action + ":" + cliente.getName() + ":" + sectionName + ":" + row + ":" + number;
+    public void logTransaction(String action, Cliente cliente, String sectionName, int row, int number) {
+        String transaction = String.format(
+            "Action: %s | Client: %s | Section: %s | Row: %d | Seat: %d",
+            action.toUpperCase(), cliente.getName(), sectionName, row, number
+        );
         transactionHistory.add(transaction); // Log transaction to history
         undoStack.push(transaction); // Push to undo stack
     }
     
-
+    
+    public void printTransactionHistory() {
+        if (transactionHistory.isEmpty()) {
+            System.out.println("No transactions found.");
+        } else {
+            System.out.println("\nTransaction History:");
+            for (String transaction : transactionHistory) {
+                System.out.println(transaction);
+            }
+        }
+    }
+    
+    
     // Undo the last transaction
-    public void undoLastTransaction() {
+    public void undoLastTransaction() {     
         if (!undoStack.isEmpty()) {
             String lastTransaction = undoStack.pop(); // Get the last transaction
             String[] parts = lastTransaction.split(":");
@@ -78,7 +92,7 @@ public class Estadio {
     
 
     // Add a client to the waitlist for a specific section
-    public void addToWaitlist(String sectionName, Cliente cliente) {
+    public void addToWaitlist(String sectionName, Cliente cliente) { 
         if (waitLists.containsKey(sectionName)) {
             waitLists.get(sectionName).add(cliente);
         }
@@ -133,6 +147,7 @@ public boolean reserveSeat(Cliente cliente, String sectionName, int row, int num
                 logTransaction("reserve", cliente, sectionName, row, number); // Log the reservation
 
                 System.out.println("Seat reserved successfully for " + cliente.getName() + ": " + newSeat);
+               
                 return true;
             } else {
                 System.out.println("Reservation failed: Section is full or seat already taken.");
