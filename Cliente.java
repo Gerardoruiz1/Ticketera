@@ -3,6 +3,7 @@ public class Cliente {
     private String email;
     private String phoneNumber;
 
+    // Constructor
     public Cliente(String name, String email, String phoneNumber) {
         validateName(name);
         validateEmail(email);
@@ -33,11 +34,11 @@ public class Cliente {
         int atIndex = email.indexOf('@');
         int dotIndex = email.lastIndexOf('.');
     
-        // Checks if Contains '@', has no spaces, '.' comes after '@'
+        // Ensure '@' exists, no spaces, and a valid domain after '.'
         if (atIndex < 1 || dotIndex < atIndex + 2 || dotIndex == email.length() - 1 || email.contains(" ")) {
-            throw new IllegalArgumentException("Invalid email: must be a valid email format with '@' and a domain.");
+            throw new IllegalArgumentException("Invalid email: must be a valid format with '@' and a domain.");
         }
-    }    
+    }
 
     public static void validatePhoneNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
@@ -49,13 +50,13 @@ public class Cliente {
         }
     }
 
-
     // Getters & Setters
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
+        validateName(name);
         this.name = name;
     }
 
@@ -64,19 +65,21 @@ public class Cliente {
     }
 
     public void setEmail(String email) {
+        validateEmail(email);
         this.email = email;
-    }    
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }    
+    }
 
     public void setPhoneNumber(String phoneNumber) {
+        validatePhoneNumber(phoneNumber);
         this.phoneNumber = phoneNumber;
     }
 
     @Override
     public String toString() {
-        return "Cliente [Nombre: " + name + ", Email: " + email + ", Teléfono: " + phoneNumber + "]";
+        return "Cliente [Name: " + name + ", Email: " + email + ", Phone Number: " + phoneNumber + "]";
     }
-}   
+}
