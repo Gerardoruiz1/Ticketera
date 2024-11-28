@@ -4,15 +4,15 @@ public class Main {
         Estadio estadio = new Estadio();
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("Enter your Name:");
+        System.out.print("Enter your Name: ");
         String name = scanner.nextLine();
         Cliente.validateName(name);
         
-        System.out.println("Enter your Email:");
+        System.out.print("Enter your Email: ");
         String email = scanner.nextLine();
         Cliente.validateEmail(email);
 
-        System.out.println("Enter your Phone Number:");
+        System.out.print("Enter your Phone Number: ");
         String phoneNumber = scanner.nextLine();
         Cliente.validatePhoneNumber(phoneNumber);
         
@@ -30,6 +30,9 @@ public class Main {
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
+            System.out.println();
+            
+            // Do not remove. It's the default next step inside the switch. 
             scanner.nextLine(); 
 
             switch (choice) {

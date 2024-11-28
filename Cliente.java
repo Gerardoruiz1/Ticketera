@@ -17,20 +17,38 @@ public class Cliente {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name cannot be null or empty.");
         }
+        if (name.trim().length() < 2) {
+            throw new IllegalArgumentException("Name must be at least 2 characters long.");
+        }
+        if (!name.matches("^[a-zA-Z ]+$")) { // Allows letters and spaces only
+            throw new IllegalArgumentException("Name can only contain letters and spaces.");
+        }
     }
 
     public static void validateEmail(String email) {
-        if (email == null || !email.contains("@") || email.contains(" ")) {
-            throw new IllegalArgumentException("Invalid email: must contain '@' and no spaces.");
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty.");
+        }
+        email = email.trim();
+        int atIndex = email.indexOf('@');
+        int dotIndex = email.lastIndexOf('.');
+    
+        // Checks if Contains '@', has no spaces, '.' comes after '@'
+        if (atIndex < 1 || dotIndex < atIndex + 2 || dotIndex == email.length() - 1 || email.contains(" ")) {
+            throw new IllegalArgumentException("Invalid email: must be a valid email format with '@' and a domain.");
+        }
+    }    
+
+    public static void validatePhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number cannot be null or empty.");
+        }
+        phoneNumber = phoneNumber.trim();
+        if (!phoneNumber.matches("\\d{10}")) {
+            throw new IllegalArgumentException("Invalid phone number: must be exactly 10 digits and contain only numbers.");
         }
     }
 
-    public static void validatePhoneNumber(String phoneNumber) {
-        phoneNumber = phoneNumber.trim(); // Remove spaces
-        if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
-            throw new IllegalArgumentException("Invalid phone number: must be exactly 10 digits.");
-        }
-    }
 
     // Getters & Setters
     public String getName() {
