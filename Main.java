@@ -1,41 +1,29 @@
 import java.util.Scanner;
+
 public class Main {
    public static void main(String[] args) {
-        Estadio estadio = new Estadio();
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.print("Enter your Name: ");
-        String name = scanner.nextLine();
-        Cliente.validateName(name);
-        
-        System.out.print("Enter your Email: ");
-        String email = scanner.nextLine();
-        Cliente.validateEmail(email);
-
-        System.out.print("Enter your Phone Number: ");
-        String phoneNumber = scanner.nextLine();
-        Cliente.validatePhoneNumber(phoneNumber);
-        
-        Cliente cliente = new Cliente(name, email, phoneNumber);
-        boolean exit = false; 
+      Estadio estadio = new Estadio();
+      Scanner scanner = new Scanner(System.in);
+      System.out.println("Enter your Name, Email and Phone Number:");
+      Cliente cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
+      boolean exit = false; 
+         // Test 1: Log transactions and view history
 
         while (!exit) {
-            //opciones del menu
+         //opciones del menu
             System.out.println("\n--- Menu ---");
             System.out.println("1. View Available Sections");
             System.out.println("2. Reserve a Seat");
             System.out.println("3. Cancel a Reservation");
             System.out.println("4. View My Reservations");
-            System.out.println("5. Add another Client"); 
+            System.out.println("5. Exit"); 
             //add another client
-            System.out.println("6. Exit"); 
+            System.out.println("6. Add another Client"); 
+            System.out.println("7. Undo Last Transaction");
             //
             System.out.print("Choose an option: ");
             
             int choice = scanner.nextInt();
-            System.out.println();
-            
-            // Do not remove. It's the default next step inside the switch. 
             scanner.nextLine(); 
 
             switch (choice) {
@@ -64,15 +52,18 @@ public class Main {
                     estadio.viewReservations(cliente);
                     break;
                 case 5: 
-                    System.out.println("Enter your Name, Email and Phone Number:");
-                    cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
-                    break;
-                    default: 
-                    System.out.println("Invalid option. Try again.");
-                case 6:
                     exit = true;
                     System.out.println("Goodbye!");
                     break;
+                case 6:
+                System.out.println("Enter your Name, Email and Phone Number:");
+                cliente = new Cliente(scanner.nextLine(), scanner.nextLine(), scanner.nextLine());
+                break;
+                case 7:
+                estadio.undoLastTransaction();
+                break;
+                default: 
+                    System.out.println("Invalid option. Try again.");
             }
         }
         scanner.close();

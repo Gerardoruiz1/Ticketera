@@ -16,9 +16,9 @@ public class Estadio {
     public final HashMap<String, Queue<Cliente>> waitLists;
     public Estadio() {
         sections = new ArrayList<>();
-        sections.add(new Section("Field Level", 300, 500));
-        sections.add(new Section("Main Level", 120, 1000));
-        sections.add(new Section("Grandstand Level", 45, 2000));
+        sections.add(new Section("Field Level", 300, 5));
+        sections.add(new Section("Main Level", 120, 1));
+        sections.add(new Section("Grandstand Level", 45, 2));
         reservations = new HashMap<>();
         transactionHistory = new LinkedList<>();
         undoStack = new Stack<>();
@@ -29,21 +29,53 @@ public class Estadio {
     }
 
      // Add a transaction to the history log
-     public void logTransaction(String transaction) {
-        transactionHistory.add(transaction);
-        undoStack.push(transaction); // Save the transaction to the undo stack
+     public void logTransaction(String action, Cliente cliente, String sectionName, int row, int number) {
+        String transaction = action + ":" + cliente.getName() + ":" + sectionName + ":" + row + ":" + number;
+        transactionHistory.add(transaction); // Log transaction to history
+        undoStack.push(transaction); // Push to undo stack
     }
+    
 
     // Undo the last transaction
     public void undoLastTransaction() {
         if (!undoStack.isEmpty()) {
-            String lastTransaction = undoStack.pop();
-            System.out.println("Undoing: " + lastTransaction);
-            // Add logic to reverse the transaction if necessary
+            String lastTransaction = undoStack.pop(); // Get the last transaction
+            String[] parts = lastTransaction.split(":");
+    
+            String action = parts[0]; // "reserve" or "cancel"
+            String customerName = parts[1];
+            String sectionName = parts[2];
+            int row = Integer.parseInt(parts[3]);
+            int number = Integer.parseInt(parts[4]);
+    
+            // Find the corresponding Cliente
+            Cliente cliente = null;
+            for (Cliente c : reservations.keySet()) {
+                if (c.getName().equals(customerName)) {
+                    cliente = c;
+                    break;
+                }
+            }
+    
+            if (cliente == null) {
+                System.out.println("Error: Customer not found for undo.");
+                return;
+            }
+    
+            if (action.equals("reserve")) {
+                // Undo reservation (cancel the seat)
+                cancelSeat(cliente, sectionName, row, number);
+                System.out.println("Undo: Reservation for " + sectionName + ", Row " + row + ", Seat " + number + " has been canceled.");
+            } else if (action.equals("cancel")) {
+                // Undo cancellation (re-reserve the seat)
+                reserveSeat(cliente, sectionName, row, number);
+                System.out.println("Undo: Seat for " + sectionName + ", Row " + row + ", Seat " + number + " has been re-reserved.");
+            }
         } else {
             System.out.println("No actions to undo.");
         }
     }
+    
 
     // Add a client to the waitlist for a specific section
     public void addToWaitlist(String sectionName, Cliente cliente) {
@@ -98,6 +130,7 @@ public boolean reserveSeat(Cliente cliente, String sectionName, int row, int num
                 Asiento newSeat = new Asiento(sectionName, row, number);
                 reservations.putIfAbsent(cliente, new ArrayList<>());
                 reservations.get(cliente).add(newSeat);
+                logTransaction("reserve", cliente, sectionName, row, number); // Log the reservation
 
                 System.out.println("Seat reserved successfully for " + cliente.getName() + ": " + newSeat);
                 return true;
@@ -134,6 +167,7 @@ public boolean reserveSeat(Cliente cliente, String sectionName, int row, int num
                             reservations.remove(cliente); // Remove the client if no reservations left
                         }
                     }
+                    logTransaction("cancel", cliente, sectionName, row, number); // Log the cancellation
     
                     System.out.println("Seat canceled successfully for " + cliente.getName() + ": " + seatToRemove);
     
@@ -167,41 +201,6 @@ public boolean reserveSeat(Cliente cliente, String sectionName, int row, int num
         }
     }
     
-
-   // PARA PROBAR, HAY QUE BORRAR DESPUES
-    public void testSeatOperations() {
-        System.out.println("Testing Seat Operations:");
-    
-        Section fieldLevel = sections.get(0);
-    
-        System.out.println("Reserving Row 1, Seat 1: " + fieldLevel.reserveSeat(1, 1));
-        System.out.println("Reserving Row 1, Seat 2: " + fieldLevel.reserveSeat(1, 2));
-        System.out.println("Reserving Row 1, Seat 1 again: " + fieldLevel.reserveSeat(1, 1)); 
-        System.out.println("Available Seats: " + fieldLevel.getAvailableSeats()); 
-        System.out.println("Canceling Row 1, Seat 1: " + fieldLevel.cancelSeat(1, 1)); 
-        System.out.println("Canceling Row 1, Seat 3: " + fieldLevel.cancelSeat(1, 3)); 
-        System.out.println("Available Seats after cancellation: " + fieldLevel.getAvailableSeats()); 
-    }
-    public void sectionSelect(Scanner scanner) {
-        System.out.println("Select section: (Enter menu option 1-" + sections.size() + ")");
-        int menuSelect;
-        do {
-            while (!scanner.hasNextInt()) { 
-                System.out.println("Invalid input. Please enter a number between 1 and " + sections.size() + ":");
-                scanner.next(); 
-            }
-            menuSelect = scanner.nextInt();
-        } while (menuSelect < 1 || menuSelect > sections.size());
-    
-        Section selectedSection = sections.get(menuSelect - 1);
-    
-        if (selectedSection.isFull()) {
-            System.out.println("Section is full. Adding to queue...");
-        } else {
-            System.out.println("Section has been selected.");
-        }
-    }
-
     // Private Section class
     private class Section {
         private final String name;
